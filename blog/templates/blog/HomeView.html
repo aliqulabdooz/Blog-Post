@@ -1,0 +1,30 @@
+{% extends '_base.html' %}
+{% block title %}
+    HomePage
+{% endblock %}
+{% block content %}
+    {% for po in post %}
+        <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+                <img class="card-img-top"
+                     data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
+                     alt="Thumbnail [100%x225]"
+                     src="https://img.freepik.com/free-photo/online-message-blog-chat-communication-envelop-graphic-icon-concept_53876-139717.jpg"
+                     data-holder-rendered="true" style="height: 225px; width: 100%; display: block;">
+                <div class="card-body">
+                    <h6 class="text-dark font-weight-normal py-2">{{ po.title }}</h6>
+                    <p class="card-text text-muted" >{{ po.text }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <a href="{% url 'blog_detail' po.id %}">
+                                <button class="btn btn-sm btn-outline-primary">Read More</button>
+                            </a>
+                        </div>
+                        <small class="text-muted">{{ po.date_created }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}

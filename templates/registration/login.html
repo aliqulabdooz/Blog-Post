@@ -1,0 +1,28 @@
+{% extends '_base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+    Login
+{% endblock %}
+{% block content %}
+    <form action="" method="post">
+        <div class="card mb-4">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="https://media.istockphoto.com/id/1281150061/vector/register-account-submit-access-login-password-username-internet-online-website-concept.jpg?s=612x612&w=0&k=20&c=9HWSuA9IaU4o-CK6fALBS5eaO1ubnsM08EOYwgbwGBo="
+                         class="img-fluid rounded-start" alt="..." style="height: 100%">
+                </div>
+                <div class="col-md-8 d-flex align-items-center">
+                    <div class="card-body">
+                        <form action="#" method="post">
+                            <h5 class="card-title mb-4">Login Page</h5>
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

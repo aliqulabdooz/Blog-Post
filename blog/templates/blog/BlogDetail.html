@@ -1,0 +1,115 @@
+{% extends '_base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+    BlogDetail
+{% endblock %}
+{% block content %}
+    <div class="card mb-5 shadow-sm">
+        <img src="https://img.freepik.com/free-photo/online-message-blog-chat-communication-envelop-graphic-icon-concept_53876-139717.jpg"
+             class="card-img-top py-3 h-100" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">{{ post.title }}</h5>
+            <p class="card-text"><small class="text-muted">{{ post.author }}</small></p>
+            <p class="card-text">{{ post.text }}</p>
+            <p class="card-text"><small class="text-muted">Last updated --> {{ post.date_modified }}</small></p>
+        </div>
+    </div>
+    <div class="card mb-5 shadow-sm">
+        <h4 class="font-weight-normal m-3 text-muted">Comments:</h4>
+        {% if comments %}
+            {% for comment in comments %}
+                <div class="row g-0 d-flex align-items-center">
+                    <div class="col-md-1">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+                             class="img-fluid rounded-start object-fit-scale shadow rounded" alt="...">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <h6 class="card-title">{{ comment.author }}</h6>
+                            <p class="card-text mt-3">
+                                {% if request.resolver_match.url_name == 'updateComment_view' and comment.id == pk %}
+                                    <form action="{% url 'updateComment_view' comment.id %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="col-md-8">
+                                            {{ updateComment|crispy }}
+                                            <button class="btn btn-sm btn-outline-success">Update</button>
+                                        </div>
+                                    </form>
+                                {% else %}
+                                    {{ comment.caption }}
+                                {% endif %}
+                            </p>
+                            <p class="card-text" style="display: inline-block"><small class="text-muted">created
+                                --> {{ comment.date_modified }}</small>
+                            </p>
+                            {% if user.id == comment.author.id %}
+                                <a href="{% url 'updateComment_view' comment.id %}">
+                                    <button class="btn btn-sm btn-outline-primary m-1">edit</button>
+                                </a>
+                                <div class="modal fade" id="exampleModal" tabindex="-1"
+                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">
+                                                    Modal
+                                                    title</h5>
+                                                <button type="button" class="btn-close"
+                                                        data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure to delete this comment?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button"
+                                                        class="btn btn-outline-primary"
+                                                        data-bs-dismiss="modal">Cancel
+                                                </button>
+                                                <a href="{% url 'deleteComment_view' comment.id post.id %}"
+                                                   type="button"
+                                                   class="btn btn-outline-danger">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {# modal #}
+                                <a class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                   data-bs-target="#exampleModal">
+                                    delete
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="row g-0 d-flex align-items-center">
+                <div class="col-md-1">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+                         class="img-fluid rounded-start object-fit-scale shadow rounded" alt="...">
+                </div>
+                <div class="col-md-6">
+                    <div class="card-body">
+                        <h6 class="card-title">No Author</h6>
+                        <p class="card-text mt-3">No Comment</p>
+                        <p class="card-text"><small class="text-muted">created
+                            --> No Time</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+    </div>
+    <div class="card mb-5 py-3 p-4 shadow-sm">
+        <h4 class="font-weight-normal mb-5 text-muted">Add Comment:</h4>
+        <div>
+            <form action="{% url 'commentCreate_view' post.id %}" method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button type="submit" class="btn btn-lg btn-outline-primary mt-2 container rounded-1">Submit</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
