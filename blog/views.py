@@ -8,7 +8,6 @@ from .models import *
 
 def blog_home_view(request):
     post = Post.objects.filter(status='pub').order_by('-date_created')[:6]
-    print(request.GET.get('localhost'))
     context = {
         'post': post
     }
@@ -61,7 +60,7 @@ def blog_comment_create_view(request, pk):
                 'comments': comments,
             }
         else:
-            return redirect('home_view')
+            return redirect('login')
     except Http404:
         return render(request, '404.html')
     return render(request, 'blog/BlogDetail.html', context)
