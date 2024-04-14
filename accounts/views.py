@@ -44,10 +44,6 @@ def accounts_addPost_view(request):
     return render(request, 'registration/profile.html', context)
 
 
-def accounts_myPost_view(request):
-    return redirect('profile_view')
-
-
 def accounts_deletePost_view(request, pk):
     try:
         get_object_or_404(Post, id=pk).delete()
